@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "C:\\xampp\\htdocs\\mori_folder\\mori_kadai\\Laravel サンプル\\laravelapp\\resources\\views\\components"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\mori_folder\\mori_kadai\\Laravel サンプル\\laravelapp\\resources\\views\\hello"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\mori_folder\\mori_kadai\\Laravel サンプル\\laravelapp\\resources\\views\\layouts"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\mori_folder\\mori_kadai\\Laravel サンプル\\laravelapp\\resources\\views\\board"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\mori_folder\\mori_kadai\\Laravel サンプル\\laravelapp\\resources\\views\\person"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\mori_folder\\mori_kadai\\Laravel サンプル\\laravelapp\\resources\\views\\rest"
+		}
+	]
+}
