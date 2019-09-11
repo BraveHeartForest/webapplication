@@ -16,8 +16,10 @@ class UploaderController extends Controller
     {
         $uploader = Uploader::orderBy('created_at','desc')->paginate(5);
         $id = array_pluck($uploader,"id");  //$uploader内部の"id"を配列として取得。
-        if(count($uploader)==0){
+        if(count($uploader)==0){    //データベースにレコードが0の場合はこの条件が成立する
             $access=null;
+            /*データベースにレコードが0の場合はforeachが動かないので、
+            $accessが未定義となってエラーを吐き出すのでnullを代入*/
         }
         foreach($id as $value)
         {
