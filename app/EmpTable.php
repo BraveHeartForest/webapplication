@@ -48,6 +48,7 @@ class EmpTable extends Model
         'dept_id.required'=>'部署IDが入力されていません。',
         'dept_id.integer'=>'部署IDは半角の整数で入力してください。',
         'dept_id.min'=>'部署IDは1以上で入力してください。',
+        'required'=>'必須項目です。',
     ];
 
 

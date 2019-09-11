@@ -24,7 +24,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/emp','EmpTableController@create')->middleware(SessionCheck::class);
-Route::post('/emp','EmpTableController@store')->middleware(SessionCheck::class);
+Route::post('/emp','EmpTableController@empConfirm')->middleware(SessionCheck::class);
+Route::put('/emp','EmpTableController@store')->middleware(SessionCheck::class);
 
 Route::get('/dept','DeptTableController@add')->middleware(SessionCheck::class);
 Route::post('/dept','DeptTableController@create');

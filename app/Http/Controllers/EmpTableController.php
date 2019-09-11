@@ -20,11 +20,27 @@ class EmpTableController extends Controller
         return view('admin.emp',['dept'=>$data]);
     }
 
+    public function empConfirm(Request $request){
+        $this->validate($request,EmpTable::$rules,EmpTable::$messages_of_rules);
+        $form = $request->all();
+        unset($form['_token']);
+        unset($form['emp_pass_confirm']);
+        //return var_dump($form);
+        $data =[];
+        $dept = DeptTable::getAllData();
+        foreach($dept as $key => $dept_name)
+        {
+            $data[$key+1] = json_decode(json_encode($dept_name), true);
+            //https://qiita.com/muramount/items/6be585bf9c031a997d9a を参考にして一次配列に変換。
+        }
+        //return var_dump($data)."<br>".$form['dept_id'];
+        return view('main.emp_confirm',['data'=>$form,'dept'=>$data]);
+    }
+
     public function store(Request $request)
     {
         //従業員を追加するメソッド。
         //この段階ではハッシュ化せずとも良い。登録時にハッシュ化されていれば良いため。
-        $this->validate($request,EmpTable::$rules,EmpTable::$messages_of_rules);
         $emp=new EmpTable;
         $form = $request->all();
         //$form['emp_pass'] = decrypt($form['emp_pass']);

@@ -69,7 +69,7 @@
                     <form action="/delete?id={{$element->emp_id}}" method="POST">
                         {{ csrf_field()}}
                         {{ method_field('DELETE') }}
-                        <button type="submit" onclick="return window.confirm('削除しますか？');" class="btn btn-danger">
+                        <button type="submit" onclick="return window.confirm('{{$element->emp_name}}を削除しても宜しいですか？');" class="btn btn-danger">
                             <i class="fa fa-trash"></i>削除
                         </button>
                     </form>
