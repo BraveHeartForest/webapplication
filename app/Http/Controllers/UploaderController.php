@@ -10,15 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class UploaderController extends Controller
 {
+    const STORAGE = 'C:/xampp/webapplication/public/storage/img/';   //imgフォルダまでの絶対パスこの後に変更する予定が無いため定数。
 
     public function getIndex()
     {
         $uploader = Uploader::orderBy('created_at','desc')->paginate(5);
         $id = array_pluck($uploader,"id");  //$uploader内部の"id"を配列として取得。
-        $storage = "C:/xampp/webapplication/public/storage/img/";    //imgフォルダまでの絶対パス。
+        if(count($uploader)==0){
+            $access=null;
+        }
         foreach($id as $value)
         {
-            $dir = $storage.$value; //各IDに対応したフォルダまでの絶対パス。
+            $dir = self::STORAGE.$value; //各IDに対応したフォルダまでの絶対パス。
             $array =[];
             if(file_exists($dir)){
                 //フォルダが存在するかを確認する。
@@ -37,7 +40,8 @@ class UploaderController extends Controller
         //return dd($uploader);
         //return array_pluck($uploader,'id'); //使用可能。
         //{"current_page":1,"data":[],"from":null,"last_page":0,"next_page_url":null,"path":"http:\/\/127.0.0.1:8000\/upload","per_page":5,"prev_page_url":null,"to":null,"total":0}
-        return view('uploader.index',['uploaders'=>$uploader,'pict'=>$access]);
+
+            return view('uploader.index',['uploaders'=>$uploader,'pict'=>$access]);
     }
 
     public function confirm(UploaderRequest $req)
@@ -82,6 +86,9 @@ class UploaderController extends Controller
 
     public function remove(Request $req)
     {
-        return $req->id;
+        //return $req->id;
+        $id = $req->id;
+        Uploader::find($id)->delete();
+        return redirect('/upload');
     }
 }
