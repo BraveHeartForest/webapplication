@@ -88,9 +88,38 @@ class UploaderController extends Controller
 
     public function remove(Request $req)
     {
-        //return $req->id;
-        $id = $req->id;
-        Uploader::find($id)->delete();
+        $id = $req->id; //$reqには削除する画像のidが入力されています。
+        Uploader::find($id)->delete();  //これで特定のidのレコードを削除します。
+        $dir = self::STORAGE.$id;   //選択されたidの画像までの絶対パスを表現。
+        self::remove_directory($dir);
         return redirect('/upload');
+    }
+
+    private function remove_directory($dir)
+    //参考サイト： https://www.sejuku.net/blog/78776
+    {
+        if(file_exists($dir)){
+            //そもそもファイルまたはディレクトリが存在するのかを調査、存在するならば……
+            $files = array_diff(scandir($dir),array('.','..'));
+            /*array_diff(A1,A2)[A1,A2は配列]はA1を他の配列(今回はA2)と比較して
+            A1の要素の中でA2には存在しないものだけを抜き出して配列として返します。
+            scandir(filename)はfilename(ファイルへのパス)の中身を配列として取り出す。
+            内容は基本的に['.','..']が最低でも含まれている。*/
+            foreach($files as $file){
+                //内部のモノがファイルかディレクトリかで処理を分岐
+                if(is_dir("$dir/$file")){
+                    //is_dir(filename)はfilename(ファイルへのパス)がディレクトリであるかどうかを調べる。
+                    //ディレクトリならば再度同じ関数を呼び出す。
+                    remove_directory("$dir/$file");
+                }else{
+                    //ファイルならば削除
+                    unlink("$dir/$file");
+                    //unlink(filename)でfilename(ファイルへのパス)を削除します。
+                }
+                //指定したディレクトリを削除
+                return rmdir($dir);
+                //rmdir(string)でstringにあるディレクトリを削除します。但し中身が存在するとエラーを出すので先に中身を空にする必要がありました。
+            }
+        }
     }
 }
