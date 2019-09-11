@@ -30,14 +30,14 @@
     <table>
         <tr>
             <th>旧パスワード(入力必須)</th>
-            <td><input type="text" name="old_pass" value="">
+            <td><input type="text" name="old_pass" value="" onInput="checkForm(this)">
                 {{--<input type="hidden" name="old_pass_confirmation" value="{{$data->emp_pass}}"> ソースコードで簡単に見えるので不適切。--}}
                 試験的に作成しているだけなのでpasswordが見えるようにtype="text"としている。
         </td>
         </tr>
         <tr>
             <th>新パスワード(変更しない場合は入力不要)</th>
-            <td><input type="password" name="new_pass" value=""></td>
+            <td><input type="password" name="new_pass" value="" onInput="checkForm(this)"></td>
         </tr>
         <tr>
             <th>名前</th>

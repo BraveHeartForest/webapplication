@@ -56,7 +56,9 @@
         </tr>
         <tr>
             <th>部署名</th>
-            <td><input type="hidden" name="dept_id" value="{{$data['dept_id']}}">{{$dept[$data['dept_id']]['dept_name']}}</td>
+            @foreach($dept as $dept_data)
+            <td><input type="hidden" name="dept_id" value="{{$data['dept_id']}}">{{$dept_data->dept_name}}</td>
+            @endforeach
         </tr>
         <tr>
             <th></th>

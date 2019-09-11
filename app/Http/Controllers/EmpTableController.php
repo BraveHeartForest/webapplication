@@ -27,14 +27,17 @@ class EmpTableController extends Controller
         unset($form['emp_pass_confirm']);
         //return var_dump($form);
         $data =[];
+        $dept = DeptTable::getIdData($form['dept_id']);
+        /*
         $dept = DeptTable::getAllData();
         foreach($dept as $key => $dept_name)
         {
             $data[$key+1] = json_decode(json_encode($dept_name), true);
             //https://qiita.com/muramount/items/6be585bf9c031a997d9a を参考にして一次配列に変換。
         }
+        */
         //return var_dump($data)."<br>".$form['dept_id'];
-        return view('main.emp_confirm',['data'=>$form,'dept'=>$data]);
+        return view('main.emp_confirm',['data'=>$form,'dept'=>$dept]);
     }
 
     public function store(Request $request)

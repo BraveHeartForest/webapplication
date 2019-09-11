@@ -55,4 +55,11 @@ class DeptTable extends Model
 
         return $dept_data;
     }
+
+    public static function getIdData($id)
+    {
+        $dept_data = DB::table('dept_table')->where('dept_id',$id)->get();
+
+        return $dept_data;
+    }
 }

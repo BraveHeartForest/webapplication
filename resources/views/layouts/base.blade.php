@@ -40,6 +40,17 @@
     </style>
     <!-- Styles
     <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
+    <script type="text/javascript">
+        function checkForm($this)
+        {
+            var str=$this.value;
+            while(str.match(/[^A-Z^a-z\d\-]/))
+            {
+                str=str.replace(/[^A-Z^a-z\d\-]/,"");
+            }
+            $this.value=str;
+        }
+    </script>
 </head>
 <body>
     <h1>@yield('title')</h1>
