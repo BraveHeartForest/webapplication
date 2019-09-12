@@ -55,33 +55,42 @@ class EmpTableController extends Controller
         return redirect('/list');   //->with('form',$form);
     }
 
-    public function getUpdate(Request $request)
-    {
-        return redirect('/list');
-    }
 
+
+
+    
     public function edit(Request $request)
     {
-        $dept_name=[];   //アクセスする度に内容が増えてしまうため、毎回初期化。
-        $dept_name = DeptTable::getAllData();
         $id=$request->id;
-        $data=DB::table('emp_table')->where('emp_id',$id)->get();
+        $dept_name=[];   //アクセスする度に内容が増えてしまうため、毎回初期化。
+        $dept_name = DeptTable::getAllData();   //Viewで使うセレクトボックス用のレコードです。
+        $data=DB::table('emp_table')->where('emp_id',$id)->get();   //指定したidでレコードを取ってきます。
         foreach($data as $key => $datum){
             $array = $datum;
         }
         session('emp_pass',$array->emp_pass);
         return view('main.edit',['data'=>$array,'id'=>$id,'dept'=>$dept_name]);   //'request'=>$requestを付け加え、editで$request->idをするとクエリ文字列が表示された。
     }
-
-    public function update(Request $request)
+    
+    public function postUpdate(Request $request)
     {
-        $request['old_pass']=md5($request['old_pass']);
-        $this->validate($request,EmpTable::$rules_edit);
+        if($request['new_pass']==null){
+            $new_pass = $request['old_pass'];   //確認画面での表示用のパスワードです。
+        }else{
+            $new_pass = $request['new_pass'];   //確認画面での表示用のパスワードです。
+        }
+
+        
+        $request['old_pass']=md5($request['old_pass']); //DBと照合するパスワード。DB内部のパスワードはハッシュ化されているのでここでハッシュ化しておく。
+        $this->validate($request,EmpTable::$rules_edit);    //$rules_editでは存在しているかだけをチェックしている。（入力したパスワードとDB内部のパスワードを照合する方法が思いつかなかったので）
         //不発$this->validate($request->old_pass,session('emp_pass'));
+        
+        
+        /*以下では入力したパスワードがDBに保管されているパスワードと等しいかを調査。本来はvalidateで出来るのが理想。 */
         $id = $request->emp_id;
         $emp = EmpTable::find($id); //データベースから引っ張ってきたレコード群
-        Session::put('emp_pass',$emp->emp_pass);
-        $form = $request->all();    //Request即ち入力されたデータ群
+        Session::put('emp_pass',$emp->emp_pass);    //データベースのレコードにあったパスワードをセッションに保存
+        $form = $request->all();    //Request即ち入力されたデータ群を配列に変換して取得する。
         unset($form['_token']);
         //unset($form['old_pass_confirmation']);    input hiddenだとソースコードから読み取れるのでold_pass_confirmation自体をカット
         if($form['new_pass']==null){    //新しいパスワードが入力されていないとき。
@@ -89,11 +98,11 @@ class EmpTableController extends Controller
             $form['emp_pass']=$form['old_pass'];    //formにemp_passという項目を作成、内容は古いパスワード。
             unset($form['old_pass']);   //formからold_passの項目を削除。
             if($form['emp_pass']!=session('emp_pass')){ //入力されたパスワードとDBから取得したパスワードが等しくないならば
-                return redirect('/list');   //一覧画面に戻る。
+                return redirect("/update?id=$id");   //変更画面に戻る。validateではないので、メッセージが表示されない。
             }
         }else{  //新しいパスワードが入力されているならば
             if($form['old_pass']!=session('emp_pass')){ //以前のパスワードがDBから取得したパスワードと等しくないならば
-                return redirect('/list');   //一覧画面に戻る。
+                return redirect("/update?id=$id");   //変更画面に戻る。
             }   //一致したならば以下の通りに進む。
             unset($form['old_pass']);   //formからold_passの項目を削除。
             //fillableやguardで入力が制限されているならばこれは必要であるか？
@@ -101,6 +110,21 @@ class EmpTableController extends Controller
             unset($form['new_pass']);   //formからnew_passの項目を削除
             $form['emp_pass']=md5($form['emp_pass']);   //新しいパスワードには暗号化がされていないはずなのでここで暗号化。古いパスワードは登録時点で暗号化されているので不要。
         }
+
+        if(is_null($form['authority'])){
+            $form['authority'] = $emp->authority;   //複数の送信が面倒なので$formにデータベースの権限を付与。
+        }
+        $dept = DeptTable::getIdData($request->dept_id)->all(); //dept_idに対応する部署名を取得する。Viewの方でforeachで取り出す。
+
+        return view('main.edit_confirm',['data'=>$form,'pass'=>$new_pass,'dept'=>$dept]);
+    }
+
+
+    public function putUpdate(Request $request)
+    {
+        $id = $request->emp_id;
+        $emp = EmpTable::find($id); //データベースから引っ張ってきたレコード群
+        $form = $request->all();    //Request即ち入力されたデータ群を配列に変換して取得する。
         $emp->fill($form)->save();
         Session::forget('emp_pass');
         //return var_dump($form);   //テスト用。

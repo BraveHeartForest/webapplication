@@ -56,6 +56,18 @@
             <th>生年月日</th>
             <td><input type="date" name="birthday" value="{{$data->birthday}}"></td>
         </tr>
+        @if(session('auth')==0)
+        <tr>
+            <th>権限</th>
+            <td><input type="radio" name="authority" value="0" checked>管理者
+            <input type="radio" name="authority" value="1">ゲスト</td>
+        </tr>
+        @else
+        <tr>
+            <th>権限</th>
+            <td><input type="hidden" name="authority" value="1">ゲスト</td>
+        </tr>
+        @endif
         <tr>
             <th>部署名</th>
             <td><select name="dept_id">

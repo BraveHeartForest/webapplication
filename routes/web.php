@@ -37,9 +37,9 @@ Route::get('/list','EmpTableController@listing')->middleware(SessionCheck::class
 
 
 //Route::でデータの入力などを行ったあとはRoute::getに従って表示される。このとき、getを定義していないとエラーが発生。
-Route::get('/update','EmpTableController@getUpdate')->middleware(SessionCheck::class);
-Route::put('/update','EmpTableController@edit')->middleware(SessionCheck::class)->name('update');
-Route::post('/update','EmpTableController@update')->middleware(SessionCheck::class);
+Route::get('/update','EmpTableController@edit')->middleware(SessionCheck::class)->name('update');   //getにしているとクエリ値を書き換えると別の個人情報にアクセスできるのでputで基本画面へ
+Route::post('/update','EmpTableController@postUpdate')->middleware(SessionCheck::class);
+Route::put('/update','EmpTableController@putUpdate')->middleware(SessionCheck::class);
 
 
 Route::delete('/delete','EmpTableController@destroy')->middleware(SessionCheck::class);

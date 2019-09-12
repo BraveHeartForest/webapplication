@@ -50,8 +50,7 @@
     @if(Session::has('auth') && session('auth')==0)
     <a href="http://127.0.0.1:8000/emp">社員登録画面へ</a><br>
     <a href="http://127.0.0.1:8000/dept">部署登録画面へ</a><br>
-    <a href="http://127.0.0.1:8000/list">一覧画面へ</a><br>
-    <a href="http://127.0.0.1:8000/login">ログイン画面へ</a>
+    <a href="http://127.0.0.1:8000/list">一覧画面へ</a>
     @else
     <a href="http://127.0.0.1:8000/list">一覧画面へ</a><br>
     <a href="http://127.0.0.1:8000/login">ログイン画面へ</a>
