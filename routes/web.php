@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\EmpTableController;
+use App\Http\Middleware\GuardQueryChange;
 use App\Http\Middleware\SessionCheck;
 use App\Http\Requests\UploaderRequest;
 
@@ -37,9 +38,11 @@ Route::get('/list','EmpTableController@listing')->middleware(SessionCheck::class
 
 
 //Route::でデータの入力などを行ったあとはRoute::getに従って表示される。このとき、getを定義していないとエラーが発生。
-Route::get('/update','EmpTableController@edit')->middleware(SessionCheck::class)->name('update');   //getにしているとクエリ値を書き換えると別の個人情報にアクセスできるのでputで基本画面へ
+//getにしているとクエリ値を書き換えると別の個人情報にアクセスできるのでputで基本画面へ送るようにしていた。
+Route::delete('/update','EmpTableController@edit')->middleware(SessionCheck::class)->name('update');   //deleteとあるが、実際はURLクエリ対策でgetはリダイレクトされるようにしてあるだけ。他の方法があれば良いのだが……
 Route::post('/update','EmpTableController@postUpdate')->middleware(SessionCheck::class);
 Route::put('/update','EmpTableController@putUpdate')->middleware(SessionCheck::class);
+Route::get('/update','EmpTableController@queryguard')->middleware(SessionCheck::class)->middleware(GuardQueryChange::class);
 
 
 Route::delete('/delete','EmpTableController@destroy')->middleware(SessionCheck::class);

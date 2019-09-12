@@ -132,6 +132,24 @@ class EmpTableController extends Controller
         return redirect('/list');
     }
 
+    public function queryguard()
+    {
+        return redirect('/list');   //GETでURLクエリを弄った際にこれで弾く。
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function destroy(Request $request)
     {
         $id=$request->id;

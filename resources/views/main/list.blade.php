@@ -30,6 +30,7 @@
         </form>
     </div>
     <div>
+        @if(count($elements)>0)
         <table>
             <tr>
                 <th>名前</th>
@@ -52,7 +53,7 @@
                 <td>
                     <form action="/update?id={{$element->emp_id}}" method="POST">
                         {{ csrf_field()}}
-                        {{ method_field('GET') }}
+                        {{ method_field('DELETE') }}
                         @if(session('auth')==0)
                         <button type="submit" class="btn btn-success">
                             <i class="fa fa-edit"></i>変更
@@ -78,6 +79,7 @@
             </tr>
             @endforeach
         </table>
+        @endif
     </div>
     @if(session('auth')===0)
     <a href="http://127.0.0.1:8000/emp">社員登録画面へ</a><br>

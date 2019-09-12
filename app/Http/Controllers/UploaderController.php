@@ -14,7 +14,7 @@ class UploaderController extends Controller
 
     public function getIndex()
     {
-        $uploader = Uploader::orderBy('created_at','desc')->paginate(5);
+        $uploader = Uploader::orderBy('created_at','desc')->paginate(10);
         $id = array_pluck($uploader,"id");  //$uploader内部の"id"を配列として取得。
         if(count($uploader)==0){    //データベースにレコードが0の場合はこの条件が成立する
             $access=null;
