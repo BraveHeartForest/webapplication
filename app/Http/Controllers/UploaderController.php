@@ -91,7 +91,11 @@ class UploaderController extends Controller
         $id = $req->id; //$reqには削除する画像のidが入力されています。
         Uploader::find($id)->delete();  //これで特定のidのレコードを削除します。
         $dir = self::STORAGE.$id;   //選択されたidの画像までの絶対パスを表現。
+        //例：C:/xampp/.../public/storage/img/64
         self::remove_directory($dir);
+        /*if(!File::exists($dir)){
+            rmdir($dir);
+        }*/
         return redirect('/upload');
     }
 
@@ -106,6 +110,7 @@ class UploaderController extends Controller
             scandir(filename)はfilename(ファイルへのパス)の中身を配列として取り出す。
             内容は基本的に['.','..']が最低でも含まれている。*/
             foreach($files as $file){
+                //このforeachは中身が何であれきれいさっぱり削除する機能。
                 //内部のモノがファイルかディレクトリかで処理を分岐
                 if(is_dir("$dir/$file")){
                     //is_dir(filename)はfilename(ファイルへのパス)がディレクトリであるかどうかを調べる。
@@ -116,10 +121,10 @@ class UploaderController extends Controller
                     unlink("$dir/$file");
                     //unlink(filename)でfilename(ファイルへのパス)を削除します。
                 }
-                //指定したディレクトリを削除
-                return rmdir($dir);
-                //rmdir(string)でstringにあるディレクトリを削除します。但し中身が存在するとエラーを出すので先に中身を空にする必要がありました。
             }
+            //指定したディレクトリを削除
+            return rmdir($dir);
+            //rmdir(string)でstringにあるディレクトリを削除します。但し中身が存在するとエラーを出すので先に中身を空にする必要がありました。
         }
     }
 }
