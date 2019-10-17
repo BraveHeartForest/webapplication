@@ -25,7 +25,7 @@
     </div>
     @endif
 
-    <h3>プロフィール画像confirm</h3>
+    <h3>プロフィール画像確認画面</h3>
     <div>
     <form action="upload" method="POST">
         {{method_field('PUT')}}

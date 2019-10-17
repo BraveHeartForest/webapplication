@@ -16,6 +16,11 @@
 
 @section('content')
 
+@php
+$last_day = date("j",mktime(0,0,0,date("n")+1,0,date("Y")));
+print "今月の最終日は".$last_day."日です。<br>";
+@endphp
+
     <h3>プロフィール画像</h3>
     <div>
     <form action="/upload" method="POST" enctype="multipart/form-data">
